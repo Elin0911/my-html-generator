@@ -567,9 +567,15 @@ ${styleContent}
                 } catch (error) {
                     showMessage('載入設定失敗：無效的 JSON 檔案。');
                     console.error('Error parsing settings file:', error);
+                } finally {
+                    // Always clear the file input value to allow re-importing the same file
+                    event.target.value = '';
                 }
             };
             reader.readAsText(file);
+        } else {
+            // If no file is selected (e.g., user cancels file dialog)
+            event.target.value = ''; // Clear value just in case
         }
     };
 
