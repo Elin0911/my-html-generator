@@ -536,14 +536,26 @@ ${styleContent}
         const jsonString = JSON.stringify(settings, null, 2);
         const blob = new Blob([jsonString], { type: 'application/json' });
         const url = URL.createObjectURL(blob);
+
+        // Get current date and time for filename
+        const now = new Date();
+        const year = now.getFullYear();
+        const month = String(now.getMonth() + 1).padStart(2, '0'); // Months are 0-indexed
+        const day = String(now.getDate()).padStart(2, '0');
+        const hours = String(now.getHours()).padStart(2, '0');
+        const minutes = String(now.getMinutes()).padStart(2, '0');
+        const formattedDateTime = `${year}${month}${day}${hours}${minutes}`;
+
+        const fileName = `${formattedDateTime}_html_generator_settings.json`;
+
         const a = document.createElement('a');
         a.href = url;
-        a.download = 'html_generator_settings.json';
+        a.download = fileName; // Use the dynamically generated filename
         document.body.appendChild(a);
         a.click();
         document.body.removeChild(a);
         URL.revokeObjectURL(url);
-        showMessage('設定已匯出為 html_generator_settings.json');
+        showMessage(`設定已匯出為 ${fileName}`);
     };
 
     // Load settings from a JSON file
