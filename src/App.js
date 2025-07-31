@@ -1,4 +1,7 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
+import {
+    Bold, Italic, Underline, Image, Link, Eraser, Code, Download, Upload, Trash2, ArrowUp
+} from 'lucide-react'; // Importing icons from lucide-react
 
 // Helper function to convert base64 to ArrayBuffer (for file operations)
 const base64ToArrayBuffer = (base64) => {
@@ -367,7 +370,7 @@ function App() {
             padding: 0;
             background-color: #f3f4f6; /* Tailwind gray-100 */
             color: #1f2937; /* Tailwind gray-800 */
-            line-height: 1.6;
+            line-height: 1.8; /* Increased line height for content */
         }
         .container {
             max-width: 800px; /* 畫面寬度為800 */
@@ -409,10 +412,11 @@ function App() {
         }
         .content {
             font-size: 1rem; /* text-base */
-            line-height: 1.75; /* leading-relaxed */
+            line-height: 1.8; /* Increased line height for content */
         }
         .content p {
-            margin-bottom: 1rem;
+            margin-top: 1rem; /* Added top margin for paragraphs */
+            margin-bottom: 1.5rem; /* Increased bottom margin for paragraphs */
         }
         .content strong, .content b {
             font-weight: 700; /* font-bold */
@@ -428,18 +432,18 @@ function App() {
             max-height: 600px; /* 圖寬MAX600 */
             height: auto;
             display: block; /* Make image a block element for margin: auto to work */
-            margin: 1rem auto; /* Center images and add vertical margin */
+            margin: 0.5rem auto; /* Reduced margin to keep image closer to caption */
             border-radius: 0.5rem; /* rounded-lg */
             box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06); /* shadow-sm */
         }
         .content figure {
-            margin: 1rem 0; /* Add margin for figures */
+            margin: 2rem 0; /* Increased vertical margin for the whole figure block */
             text-align: center; /* Center content within figure, including figcaption */
         }
         .content figcaption {
             font-size: 0.875rem; /* text-sm, smaller font for caption */
             color: #6b7280; /* Tailwind gray-500 */
-            margin-top: 0.5rem; /* mt-2 */
+            margin-top: 0.25rem; /* Reduced margin to keep caption closer to image */
             text-align: center; /* Ensure caption is centered */
         }
         .content a {
@@ -582,18 +586,35 @@ ${styleContent}
     }, [editorContent]);
 
     return (
-        <div className="min-h-screen bg-gray-100 p-4 flex flex-col items-center font-sans">
+        <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 p-6 flex flex-col items-center font-sans text-gray-800">
+            {/* Tailwind CSS Customization (for animations) */}
+            <style>{` /* Removed 'jsx' attribute */
+                @keyframes fadeIn {
+                    from { opacity: 0; }
+                    to { opacity: 1; }
+                }
+                @keyframes popIn {
+                    from { transform: scale(0.9); opacity: 0; }
+                    to { transform: scale(1); opacity: 1; }
+                }
+                .animate-fadeIn {
+                    animation: fadeIn 0.3s ease-out forwards;
+                }
+                .animate-popIn {
+                    animation: popIn 0.3s ease-out forwards;
+                }
+            `}</style>
             <script src="https://cdn.tailwindcss.com"></script>
-            <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
+            <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet" />
 
             {/* Custom Message Box (for general messages like export/import status) */}
             {showMessageBox && (
-                <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center z-50">
-                    <div className="bg-white p-6 rounded-lg shadow-xl max-w-sm w-full text-center">
-                        <p className="text-lg mb-4">{message}</p>
+                <div className="fixed inset-0 bg-gray-900 bg-opacity-60 flex items-center justify-center z-50 animate-fadeIn">
+                    <div className="bg-white p-8 rounded-xl shadow-2xl max-w-sm w-full text-center transform scale-95 animate-popIn">
+                        <p className="text-xl font-semibold mb-5 text-gray-800">{message}</p>
                         <button
                             onClick={hideMessageBox}
-                            className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-lg transition duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
+                            className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg shadow-md transition duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-blue-300"
                         >
                             確定
                         </button>
@@ -603,41 +624,41 @@ ${styleContent}
 
             {/* Custom Input Modal (for Image/Link URLs/Captions) */}
             {showInputModal && (
-                <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center z-50">
-                    <div className="bg-white p-6 rounded-lg shadow-xl max-w-md w-full">
-                        <h3 className="text-xl font-bold mb-4 text-gray-800">{inputModalTitle}</h3>
-                        <div className="mb-4">
-                            <label htmlFor="input1" className="block text-gray-700 text-sm font-semibold mb-1">{inputModalLabel1}</label>
+                <div className="fixed inset-0 bg-gray-900 bg-opacity-60 flex items-center justify-center z-50 animate-fadeIn">
+                    <div className="bg-white p-8 rounded-xl shadow-2xl max-w-md w-full transform scale-95 animate-popIn">
+                        <h3 className="text-2xl font-bold mb-6 text-gray-800">{inputModalTitle}</h3>
+                        <div className="mb-5">
+                            <label htmlFor="input1" className="block text-gray-700 text-sm font-semibold mb-2">{inputModalLabel1}</label>
                             <input
                                 type="text"
                                 id="input1"
-                                className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-3 focus:ring-blue-400 transition duration-200 text-gray-800"
                                 value={tempInput1}
                                 onChange={(e) => setTempInput1(e.target.value)}
                                 placeholder={inputModalPlaceholder1}
                             />
                         </div>
-                        <div className="mb-6">
-                            <label htmlFor="input2" className="block text-gray-700 text-sm font-semibold mb-1">{inputModalLabel2}</label>
+                        <div className="mb-8">
+                            <label htmlFor="input2" className="block text-gray-700 text-sm font-semibold mb-2">{inputModalLabel2}</label>
                             <input
                                 type="text"
                                 id="input2"
-                                className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-3 focus:ring-blue-400 transition duration-200 text-gray-800"
                                 value={tempInput2}
                                 onChange={(e) => setTempInput2(e.target.value)}
                                 placeholder={inputModalPlaceholder2}
                             />
                         </div>
-                        <div className="flex justify-end gap-3">
+                        <div className="flex justify-end gap-4">
                             <button
                                 onClick={closeInputModal}
-                                className="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded-lg transition duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-gray-300 focus:ring-opacity-50"
+                                className="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-3 px-6 rounded-lg shadow-md transition duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-gray-300"
                             >
                                 取消
                             </button>
                             <button
                                 onClick={handleInputModalConfirm}
-                                className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-lg transition duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
+                                className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg shadow-md transition duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-blue-300"
                             >
                                 確定
                             </button>
@@ -646,50 +667,50 @@ ${styleContent}
                 </div>
             )}
 
-            <div className="w-full max-w-4xl bg-white p-6 rounded-xl shadow-lg mb-8">
-                <h1 className="text-3xl font-bold text-center text-gray-800 mb-6">HTML 內容產生器</h1>
+            <div className="w-full max-w-5xl bg-white p-8 rounded-2xl shadow-xl mb-10 border border-gray-200">
+                <h1 className="text-4xl font-extrabold text-center text-gray-900 mb-8 tracking-tight">HTML 內容產生器</h1>
 
                 {/* Input Fields */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-                    <div>
-                        <label htmlFor="mainCategoryName" className="block text-gray-700 text-sm font-semibold mb-1">主分類名稱 (純文字)</label>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                    <div className="col-span-1">
+                        <label htmlFor="mainCategoryName" className="block text-gray-700 text-base font-semibold mb-2">主分類名稱 (純文字)</label>
                         <input
                             type="text"
                             id="mainCategoryName"
-                            className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-3 focus:ring-blue-400 transition duration-200 text-gray-800 placeholder-gray-400"
                             value={mainCategoryName}
                             onChange={(e) => setMainCategoryName(e.target.value)}
                             placeholder="例如：科技"
                         />
                     </div>
-                    <div>
-                        <label htmlFor="mainCategoryUrl" className="block text-gray-700 text-sm font-semibold mb-1">主分類 URL (可選)</label>
+                    <div className="col-span-1">
+                        <label htmlFor="mainCategoryUrl" className="block text-gray-700 text-base font-semibold mb-2">主分類 URL (可選)</label>
                         <input
                             type="url"
                             id="mainCategoryUrl"
-                            className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-3 focus:ring-blue-400 transition duration-200 text-gray-800 placeholder-gray-400"
                             value={mainCategoryUrl}
                             onChange={(e) => setMainCategoryUrl(e.target.value)}
                             placeholder="例如：https://example.com/tech"
                         />
                     </div>
-                    <div>
-                        <label htmlFor="subCategoryName" className="block text-gray-700 text-sm font-semibold mb-1">次分類名稱 (純文字)</label>
+                    <div className="col-span-1">
+                        <label htmlFor="subCategoryName" className="block text-gray-700 text-base font-semibold mb-2">次分類名稱 (純文字)</label>
                         <input
                             type="text"
                             id="subCategoryName"
-                            className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-3 focus:ring-blue-400 transition duration-200 text-gray-800 placeholder-gray-400"
                             value={subCategoryName}
                             onChange={(e) => setSubCategoryName(e.target.value)}
                             placeholder="例如：人工智慧"
                         />
                     </div>
-                    <div>
-                        <label htmlFor="subCategoryUrl" className="block text-gray-700 text-sm font-semibold mb-1">次分類 URL (可選)</label>
+                    <div className="col-span-1">
+                        <label htmlFor="subCategoryUrl" className="block text-gray-700 text-base font-semibold mb-2">次分類 URL (可選)</label>
                         <input
                             type="url"
                             id="subCategoryUrl"
-                            className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-3 focus:ring-blue-400 transition duration-200 text-gray-800 placeholder-gray-400"
                             value={subCategoryUrl}
                             onChange={(e) => setSubCategoryUrl(e.target.value)}
                             placeholder="例如：https://example.com/ai"
@@ -697,12 +718,12 @@ ${styleContent}
                     </div>
                 </div>
 
-                <div className="mb-6">
-                    <label htmlFor="titleText" className="block text-gray-700 text-sm font-semibold mb-1">題目欄位 (純文字)</label>
+                <div className="mb-8">
+                    <label htmlFor="titleText" className="block text-gray-700 text-base font-semibold mb-2">題目欄位 (純文字)</label>
                     <input
                         type="text"
                         id="titleText"
-                        className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-3 focus:ring-blue-400 transition duration-200 text-gray-800 placeholder-gray-400"
                         value={titleText}
                         onChange={(e) => setTitleText(e.target.value)}
                         placeholder="例如：人工智慧的未來趨勢"
@@ -710,87 +731,91 @@ ${styleContent}
                 </div>
 
                 {/* Rich Text Editor */}
-                <div className="mb-6">
-                    <label className="block text-gray-700 text-sm font-semibold mb-2">回答欄位 (所見即所得編輯器)</label>
-                    <div className="flex flex-wrap gap-2 mb-2">
+                <div className="mb-8">
+                    <label className="block text-gray-700 text-base font-semibold mb-3">回答欄位 (所見即所得編輯器)</label>
+                    <div className="flex flex-wrap gap-2 mb-3 p-2 bg-gray-100 rounded-lg shadow-inner border border-gray-200">
                         <button
                             onClick={() => applyFormat('bold')}
                             onMouseDown={(e) => e.preventDefault()} // Prevent editor blur
-                            className="p-2 bg-gray-200 hover:bg-gray-300 rounded-lg font-bold text-gray-800 transition duration-200"
+                            className="flex items-center justify-center p-2 bg-white hover:bg-blue-50 rounded-md shadow-sm text-gray-700 transition duration-200 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-300"
+                            title="粗體"
                         >
-                            粗體
+                            <Bold size={18} />
                         </button>
                         <button
                             onClick={() => applyFormat('italic')}
                             onMouseDown={(e) => e.preventDefault()}
-                            className="p-2 bg-gray-200 hover:bg-gray-300 rounded-lg italic text-gray-800 transition duration-200"
+                            className="flex items-center justify-center p-2 bg-white hover:bg-blue-50 rounded-md shadow-sm text-gray-700 transition duration-200 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-300"
+                            title="斜體"
                         >
-                            斜體
+                            <Italic size={18} />
                         </button>
                         <button
                             onClick={() => applyFormat('underline')}
                             onMouseDown={(e) => e.preventDefault()}
-                            className="p-2 bg-gray-200 hover:bg-gray-300 rounded-lg underline text-gray-800 transition duration-200"
+                            className="flex items-center justify-center p-2 bg-white hover:bg-blue-50 rounded-md shadow-sm text-gray-700 transition duration-200 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-300"
+                            title="底線"
                         >
-                            底線
+                            <Underline size={18} />
                         </button>
                         <input
                             type="color"
                             onInput={(e) => applyFormat('foreColor', e.target.value)}
                             onMouseDown={(e) => e.preventDefault()}
-                            className="w-10 h-10 p-1 border border-gray-300 rounded-lg cursor-pointer"
+                            className="w-10 h-10 p-1 border border-gray-300 rounded-md cursor-pointer shadow-sm transition duration-200 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-300"
                             title="文字顏色"
                         />
                         <button
                             onClick={insertImage}
                             onMouseDown={(e) => e.preventDefault()} // Prevent editor blur
-                            className="p-2 bg-gray-200 hover:bg-gray-300 rounded-lg text-gray-800 transition duration-200"
+                            className="flex items-center justify-center p-2 bg-white hover:bg-blue-50 rounded-md shadow-sm text-gray-700 transition duration-200 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-300"
+                            title="插入圖片"
                         >
-                            插入圖片
+                            <Image size={18} />
                         </button>
                         <button
                             onClick={insertLink}
                             onMouseDown={(e) => e.preventDefault()} // Prevent editor blur
-                            className="p-2 bg-gray-200 hover:bg-gray-300 rounded-lg text-gray-800 transition duration-200"
+                            className="flex items-center justify-center p-2 bg-white hover:bg-blue-50 rounded-md shadow-sm text-gray-700 transition duration-200 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-300"
+                            title="插入超連結"
                         >
-                            插入超連結
+                            <Link size={18} />
                         </button>
                         <button
                             onClick={clearFormatting}
                             onMouseDown={(e) => e.preventDefault()} // Prevent editor blur
-                            className="p-2 bg-red-400 hover:bg-red-500 text-white font-bold py-1 px-3 rounded-lg transition duration-200"
+                            className="flex items-center justify-center p-2 bg-red-100 hover:bg-red-200 rounded-md shadow-sm text-red-700 font-semibold transition duration-200 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-red-300"
+                            title="清除格式"
                         >
-                            清除格式
+                            <Eraser size={18} className="mr-1" /> 清除格式
                         </button>
                     </div>
                     <div
                         ref={editorRef}
                         contentEditable="true"
-                        className="w-full min-h-[200px] p-4 border border-gray-300 rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 overflow-y-auto"
+                        className="w-full min-h-[250px] p-5 border border-gray-300 rounded-lg bg-white shadow-md focus:outline-none focus:ring-3 focus:ring-blue-400 transition duration-200 overflow-y-auto text-gray-800 leading-relaxed"
                         onBlur={handleEditorBlur} // Sync state on blur
                         onPaste={handlePaste} // Add paste handler
                         onKeyDown={handleKeyDown} // Handle keydown events, especially for Enter
-                        // We remove dangerouslySetInnerHTML and onInput for live typing
-                        // The content is managed directly by contentEditable and synced on blur/explicit actions.
                     ></div>
                 </div>
 
                 {/* Actions */}
-                <div className="flex flex-wrap gap-4 justify-center mb-6">
+                <div className="flex flex-wrap gap-4 justify-center mb-10">
                     <button
                         onClick={generateHtmlCss}
-                        className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-6 rounded-lg shadow-md transition duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50"
+                        className="flex items-center bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white font-bold py-3 px-8 rounded-lg shadow-lg transition duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-green-300"
                     >
-                        產生 HTML + CSS
+                        <Code size={20} className="mr-2" /> 產生 HTML + CSS
                     </button>
                     <button
                         onClick={exportSettings}
-                        className="bg-purple-500 hover:bg-purple-600 text-white font-bold py-2 px-6 rounded-lg shadow-md transition duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-opacity-50"
+                        className="flex items-center bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700 text-white font-bold py-3 px-8 rounded-lg shadow-lg transition duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-purple-300"
                     >
-                        匯出設定檔
+                        <Download size={20} className="mr-2" /> 匯出設定檔
                     </button>
-                    <label className="bg-orange-500 hover:bg-orange-600 text-white font-bold py-2 px-6 rounded-lg shadow-md cursor-pointer transition duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-opacity-50">
-                        匯入設定檔
+                    <label className="flex items-center bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-bold py-3 px-8 rounded-lg shadow-lg cursor-pointer transition duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-orange-300">
+                        <Upload size={20} className="mr-2" /> 匯入設定檔
                         <input
                             type="file"
                             accept=".json"
@@ -800,30 +825,30 @@ ${styleContent}
                     </label>
                     <button
                         onClick={clearAllContent}
-                        className="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-6 rounded-lg shadow-md transition duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-opacity-50"
+                        className="flex items-center bg-gradient-to-r from-gray-500 to-gray-600 hover:from-gray-600 hover:to-gray-700 text-white font-bold py-3 px-8 rounded-lg shadow-lg transition duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-gray-300"
                     >
-                        清空所有內容
+                        <Trash2 size={20} className="mr-2" /> 清空所有內容
                     </button>
                 </div>
             </div>
 
             {/* Generated HTML Output */}
             {generatedHtml && (
-                <div className="w-full max-w-4xl bg-white p-6 rounded-xl shadow-lg">
-                    <h2 className="text-2xl font-bold text-gray-800 mb-4 text-center">產生的 HTML + CSS 程式碼</h2>
-                    <div className="bg-gray-800 text-white p-4 rounded-lg overflow-x-auto text-sm">
+                <div className="w-full max-w-5xl bg-gray-900 p-8 rounded-2xl shadow-xl border border-gray-700 mb-10">
+                    <h2 className="text-3xl font-bold text-white mb-6 text-center">產生的 HTML + CSS 程式碼</h2>
+                    <div className="bg-gray-800 text-gray-200 p-6 rounded-lg overflow-x-auto text-sm font-mono leading-relaxed shadow-inner">
                         <pre><code>{generatedHtml}</code></pre>
                     </div>
                     {/* New Copy Button */}
-                    <div className="flex justify-center mt-4">
+                    <div className="flex justify-center mt-8">
                         <button
                             onClick={copyToClipboard}
-                            className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-6 rounded-lg shadow-md transition duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
+                            className="bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-bold py-3 px-8 rounded-lg shadow-lg transition duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-blue-300"
                         >
-                            複製程式碼
+                            <Code size={20} className="mr-2" /> 複製程式碼
                         </button>
                     </div>
-                    <p className="text-center text-gray-600 mt-4 text-sm">您可以複製上述程式碼並將其貼到您的 HTML 檔案中。</p>
+                    <p className="text-center text-gray-400 mt-6 text-sm">您可以複製上述程式碼並將其貼到您的 HTML 檔案中。</p>
                 </div>
             )}
 
@@ -831,13 +856,10 @@ ${styleContent}
             {showScrollToTopButton && (
                 <button
                     onClick={scrollToTop}
-                    className="fixed bottom-8 right-8 bg-blue-600 hover:bg-blue-700 text-white p-3 rounded-full shadow-lg transition-all duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
+                    className="fixed bottom-8 right-8 bg-blue-600 hover:bg-blue-700 text-white p-4 rounded-full shadow-lg transition-all duration-300 ease-in-out transform hover:scale-110 focus:outline-none focus:ring-4 focus:ring-blue-300 z-40"
                     title="回到頂部"
                 >
-                    {/* SVG for an upward arrow */}
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 10l7-7m0 0l7 7m-7-7v18" />
-                    </svg>
+                    <ArrowUp size={24} />
                 </button>
             )}
         </div>
