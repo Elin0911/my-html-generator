@@ -318,51 +318,9 @@ function App() {
         showMessage('所有內容已清空！');
     };
 
-    // Function to copy generated HTML to clipboard
-    const copyToClipboard = () => {
-        if (generatedHtml) {
-            // Use a temporary textarea to copy the text
-            const textarea = document.createElement('textarea');
-            textarea.value = generatedHtml;
-            document.body.appendChild(textarea);
-            textarea.select();
-            document.execCommand('copy');
-            document.body.removeChild(textarea);
-            showMessage('HTML + CSS 程式碼已複製到剪貼簿！');
-        } else {
-            showMessage('沒有可複製的程式碼。請先產生 HTML。');
-        }
-    };
-
-    // Function to scroll to the top of the page
-    const scrollToTop = () => {
-        window.scrollTo({
-            top: 0,
-            behavior: 'smooth' // Smooth scrolling
-        });
-    };
-
-    // Effect to handle scroll event for showing/hiding scroll to top button
-    useEffect(() => {
-        const handleScroll = () => {
-            if (window.pageYOffset > 300) { // Show button after scrolling 300px down
-                setShowScrollToTopButton(true);
-            } else {
-                setShowScrollToTopButton(false);
-            }
-        };
-
-        window.addEventListener('scroll', handleScroll);
-
-        // Clean up the event listener when the component unmounts
-        return () => {
-            window.removeEventListener('scroll', handleScroll);
-        };
-    }, []); // Empty dependency array means this effect runs once on mount and cleans up on unmount
-
-
-    // Generate HTML and CSS
-    const generateHtmlCss = () => {
+    // Function to generate and copy HTML to clipboard in one click
+    const generateAndCopyToClipboard = () => {
+        // Generate the HTML content string
         const styleContent = `
         body {
             font-family: 'Inter', sans-serif;
@@ -520,7 +478,17 @@ ${styleContent}
     </div>
 </body>
 </html>`;
-        setGeneratedHtml(htmlContent);
+
+        // Use a temporary textarea to copy the text
+        const textarea = document.createElement('textarea');
+        textarea.value = htmlContent;
+        document.body.appendChild(textarea);
+        textarea.select();
+        document.execCommand('copy');
+        document.body.removeChild(textarea);
+
+        showMessage('HTML + CSS 程式碼已複製到剪貼簿！');
+
     };
 
     // Export settings to a JSON file
@@ -546,7 +514,9 @@ ${styleContent}
         const minutes = String(now.getMinutes()).padStart(2, '0');
         const formattedDateTime = `${year}${month}${day}${hours}${minutes}`;
 
-        const fileName = `${formattedDateTime}_html_generator_settings.json`;
+        // Sanitize the title to be a valid filename
+        const sanitizedTitle = titleText.replace(/[\/\\?%*:|"<>]/g, '');
+        const fileName = `${formattedDateTime}_${sanitizedTitle || 'html_generator_settings'}.json`;
 
         const a = document.createElement('a');
         a.href = url;
@@ -602,6 +572,33 @@ ${styleContent}
             // We don't try to restore cursor here as this is for external changes.
         }
     }, [editorContent]);
+
+    // Function to scroll to the top of the page
+    const scrollToTop = () => {
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth' // Smooth scrolling
+        });
+    };
+
+    // Effect to handle scroll event for showing/hiding scroll to top button
+    useEffect(() => {
+        const handleScroll = () => {
+            if (window.pageYOffset > 300) { // Show button after scrolling 300px down
+                setShowScrollToTopButton(true);
+            } else {
+                setShowScrollToTopButton(false);
+            }
+        };
+
+        window.addEventListener('scroll', handleScroll);
+
+        // Clean up the event listener when the component unmounts
+        return () => {
+            window.removeEventListener('scroll', handleScroll);
+        };
+    }, []); // Empty dependency array means this effect runs once on mount and cleans up on unmount
+
 
     return (
         <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 p-6 flex flex-col items-center font-sans text-gray-800">
@@ -821,10 +818,10 @@ ${styleContent}
                 {/* Actions */}
                 <div className="flex flex-wrap gap-4 justify-center mb-10">
                     <button
-                        onClick={generateHtmlCss}
+                        onClick={generateAndCopyToClipboard}
                         className="flex items-center bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white font-bold py-3 px-8 rounded-lg shadow-lg transition duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-green-300"
                     >
-                        <Code size={20} className="mr-2" /> 產生 HTML + CSS
+                        <Code size={20} className="mr-2" /> 一鍵複製
                     </button>
                     <button
                         onClick={exportSettings}
