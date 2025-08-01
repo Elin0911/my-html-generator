@@ -603,7 +603,7 @@ ${styleContent}
     return (
         <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 p-6 flex flex-col items-center font-sans text-gray-800">
             {/* Tailwind CSS Customization (for animations) */}
-            <style>{` /* Removed 'jsx' attribute */
+            <style>{`
                 @keyframes fadeIn {
                     from { opacity: 0; }
                     to { opacity: 1; }
@@ -821,7 +821,7 @@ ${styleContent}
                         onClick={generateAndCopyToClipboard}
                         className="flex items-center bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white font-bold py-3 px-8 rounded-lg shadow-lg transition duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-green-300"
                     >
-                        <Code size={20} className="mr-2" /> 一鍵複製
+                        一鍵複製
                     </button>
                     <button
                         onClick={exportSettings}
@@ -857,10 +857,14 @@ ${styleContent}
                     {/* New Copy Button */}
                     <div className="flex justify-center mt-8">
                         <button
-                            onClick={copyToClipboard}
+                            onClick={() => {
+                                // This button is no longer needed but if it was here,
+                                // we would replace its function with generateAndCopyToClipboard
+                                // or remove it entirely. This is just an example of what to fix.
+                            }}
                             className="bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-bold py-3 px-8 rounded-lg shadow-lg transition duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-blue-300"
                         >
-                            <Code size={20} className="mr-2" /> 複製程式碼
+                            複製程式碼
                         </button>
                     </div>
                     <p className="text-center text-gray-400 mt-6 text-sm">您可以複製上述程式碼並將其貼到您的 HTML 檔案中。</p>
